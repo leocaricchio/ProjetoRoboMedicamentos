@@ -3,10 +3,12 @@
 Projeto: Robô Entregador de Medicamentos em Hospital
 
 **Descrição Geral**
+
 Um robô autônomo deve entregar medicamentos a diferentes quartos em um hospital representado como uma grade bidimensional.
 O robô inicia na farmácia e deve visitar todas as posições que possuem pedidos, minimizando o custo total de movimentação.
 
 **1.1-Representação dos Estados**
+
 Cada estado é representado por:
 
 **state = (posicao_robo, entregas_pendentes)**
