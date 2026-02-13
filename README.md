@@ -1,6 +1,6 @@
 **1-Modelagem Formal do Problema**
-...
-**Projeto: Robô Entregador de Medicamentos em Hospital**
+
+Projeto: Robô Entregador de Medicamentos em Hospital
 
 **Descrição Geral**
 Um robô autônomo deve entregar medicamentos a diferentes quartos em um hospital representado como uma grade bidimensional.
