@@ -79,7 +79,7 @@ Retorna o novo estado
     (nova_pos, entregas - {nova_pos})  se nova_pos ∈ entregas
     (nova_pos, entregas)              caso contrário**
 
-Mapeamento no código:
+Mapeamento no código :
 
 **result(self, state, action)**
 
