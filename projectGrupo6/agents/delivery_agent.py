@@ -2,7 +2,7 @@
 
 from aima3.search import astar_search
 from aima3.agents import Agent
-#from problems.delivery_problem import DeliveryProblem
+from problems.delivery_problem import DeliveryProblem
 
 
 class DeliveryAgentProgram:
