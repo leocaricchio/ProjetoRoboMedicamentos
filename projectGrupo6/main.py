@@ -42,7 +42,7 @@ def run_environment_demo():
 
     max_steps = 200
 
-    print("\n=== SIMULAÇÃO NO AMBIENTE (passo a passo) ===")
+    print("\n=== SIMULACAO NO AMBIENTE (passo a passo) ===")
     for step in range(max_steps):
         print(f"\n--- step {step} ---")
         env.render()
