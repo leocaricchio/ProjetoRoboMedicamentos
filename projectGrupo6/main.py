@@ -1,19 +1,7 @@
 import time
-from env.hospital_env import HospitalEnvironment
-from agents.delivery_agent import DeliveryAgent
-
-#Teste para algoritmo sem ambiente definido
-
-# Estado inicial
-initial_position = (0, 0)
-deliveries = frozenset({(2, 2), (3, 1)})
-initial_state = (initial_position, deliveries)
-
-import time
 
 from env.hospital_env import HospitalEnvironment
 from agents.delivery_agent import DeliveryAgent
-
 
 def run_environment_demo():
     """
@@ -22,7 +10,6 @@ def run_environment_demo():
     """
 
     grid_size = 5
-
 
     walls = set()
 
