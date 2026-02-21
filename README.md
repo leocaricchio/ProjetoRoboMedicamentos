@@ -130,3 +130,56 @@ Mapeamento no código:
 **h(self, node)**
 
 
+
+
+
+
+
+
+
+
+# Como Executar o Sistema
+
+## Pré-requisitos
+
+- Python 3.9 ou superior
+- pip instalado
+
+---
+
+## 1 Instalar dependências
+
+O projeto utiliza o repositório oficial do AIMA (`aima3`).
+
+Execute no terminal:
+
+```bash
+pip install aima3
+```
+
+---
+
+## 2 Executar o sistema
+
+No diretório raiz do projeto (onde está o arquivo `main.py`), execute:
+
+```bash
+python main.py
+```
+
+---
+
+## 3 O que acontecerá na execução
+
+- O ambiente hospitalar será inicializado (grade 10x10).
+- O agente inteligente será inserido no ambiente.
+- O algoritmo A* será utilizado para planejar as entregas.
+- A simulação será exibida passo a passo no terminal.
+- O ambiente será renderizado a cada iteração, mostrando:
+  - `R` → Robô
+  - `D` → Entregas
+  - `=` → Paredes
+  - `.` → Espaço livre
+
+A execução termina automaticamente quando todas as entregas forem concluídas ou quando o número máximo de passos for atingido.
+
