@@ -1,4 +1,7 @@
 import time
+import collections
+import collections.abc
+collections.Callable = collections.abc.Callable
 
 from env.hospital_env import HospitalEnvironment
 from agents.delivery_agent import DeliveryAgent
