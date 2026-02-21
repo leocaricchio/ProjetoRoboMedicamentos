@@ -145,7 +145,6 @@ Mapeamento no código:
 - Python 3.9 ou superior
 - pip instalado
 
----
 
 ## 1 Instalar dependências
 
@@ -157,7 +156,6 @@ Execute no terminal:
 pip install aima3
 ```
 
----
 
 ## 2 Executar o sistema
 
@@ -167,7 +165,6 @@ No diretório raiz do projeto (onde está o arquivo `main.py`), execute:
 python main.py
 ```
 
----
 
 ## 3 O que acontecerá na execução
 
