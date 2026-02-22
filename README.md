@@ -1,144 +1,239 @@
-**1-Modelagem Formal do Problema**
+# Robô Entregador de Medicamentos em Hospital
 
-Projeto: Robô Entregador de Medicamentos em Hospital
+## Descrição do Projeto
 
-**Descrição Geral**
+Este projeto implementa um agente inteligente baseado em busca para realizar entregas de medicamentos em um hospital representado por uma grade bidimensional.
 
-Um robô autônomo deve entregar medicamentos a diferentes quartos em um hospital representado como uma grade bidimensional.
-O robô inicia na farmácia e deve visitar todas as posições que possuem pedidos, minimizando o custo total de movimentação.
+O robô inicia em uma posição inicial (farmácia) e deve visitar todas as salas que possuem pedidos, minimizando o custo total de movimentação.
 
-**1.1-Representação dos Estados**
+A solução utiliza a arquitetura **Ambiente – Agente – Programa de Agente**, conforme o modelo apresentado no livro *Artificial Intelligence: A Modern Approach (Russell & Norvig)* e no repositório **aima-python**.
+
+# 1. Modelagem Formal do Problema
+
+## 1.1 Representação dos Estados
 
 Cada estado é representado por:
 
-**state = (posicao_robo, entregas_pendentes)**
+state = (posicao_robo, entregas_pendentes)
 
 Onde:
 
-posicao_robo = tupla (x, y) indicando a posição atual do robô na grade
-
-entregas_pendentes = conjunto imutável (frozenset) contendo as posições que ainda precisam de entrega
+* posicao_robo: tupla (x, y) indicando a posição atual do robô.
+* entregas_pendentes: frozenset contendo as posições que ainda precisam de entrega.
 
 Exemplo:
+
 ((2, 1), frozenset({(0,3), (4,4)}))
 
-Significa:
+Uso de frozenset é necessário para permitir hashing e comparação eficiente, conforme esperado pelas estruturas do AIMA.
 
-Robô na posição (2,1)
+**Mapeamento no código:**
+`DeliveryProblem(Problem)`
 
-Entregas restantes em (0,3) e (4,4)
-
-*o conjunto precisa ser frozenset devido às especificações do AIMA
-
-Mapeamento para o código:
-
-**HospitalDeliveryProblem(Problem)**
-
-**1.2-Estado Inicial**
+## 1.2 Estado Inicial
 
 O estado inicial é definido como:
 
-**(posicao_inicial, todas_as_entregas)**
-
-Onde:
-
-posicao_inicial = posição da farmácia (ex: (0,0))
-
-todas_as_entregas = frozenset com todas as posições de entrega
+```
+(posicao_inicial, todas_as_entregas)
+```
 
 Exemplo:
+
+```
 ((0,0), frozenset({(1,2), (3,4), (4,1)}))
+```
 
-**3. Conjunto de Ações**
+---
 
-Em cada estado, o agente pode executar quatro ações de movimento:
-UP
-DOWN
-LEFT
-RIGHT
+## 1.3 Conjunto de Ações
 
-Cada ação move o robô uma célula na grade, respeitando os limites do ambiente e buscando a melhor rota para zerar as entregas pendentes.
+Ações possíveis em cada estado:
 
-*Se o robô entrar em uma posição que pertence a entregas_pendentes, a entrega é realizada automaticamente.
+* `UP`
+* `DOWN`
+* `LEFT`
+* `RIGHT`
 
-Mapeamento no código:
+Cada ação move o robô uma célula dentro dos limites da grade.
 
-**actions(self, state)**
+Se o robô entrar em uma posição que contém uma entrega pendente, a entrega é realizada automaticamente.
 
-**1.4-Modelo de Transição —result(s, a)**
+**Mapeamento no código:**
+`actions(self, state)`
+
+---
+
+## 1.4 Modelo de Transição — result(s, a)
 
 A função de transição:
 
-Calcula a nova posição do robô com base na ação
+* Calcula a nova posição do robô
+* Remove a entrega se houver
+* Retorna o novo estado
 
-Verifica se a nova posição contém uma entrega pendente(Se sim, remove essa posição do conjunto de entregas)
+Formalmente:
 
-Retorna o novo estado
-
-**result((pos, entregas), ação) =
+```
+result((pos, entregas), ação) =
     (nova_pos, entregas - {nova_pos})  se nova_pos ∈ entregas
-    (nova_pos, entregas)              caso contrário**
+    (nova_pos, entregas)              caso contrário
+```
 
-Mapeamento no código :
+**Mapeamento no código:**
+`result(self, state, action)`
 
-**result(self, state, action)**
+---
 
-**1.5-Teste de Objetivo — goal_test**
+## 1.5 Teste de Objetivo — goal_test
 
-O objetivo é alcançado quando:
+O objetivo é alcançado quando não há entregas pendentes.
 
-entregas_pendentes está vazio
+```
+goal_test(state) = True se len(entregas_pendentes) == 0
+```
 
-**goal_test(state) = True  se len(entregas_pendentes) == 0**
+**Mapeamento no código:**
+`goal_test(self, state)`
 
-Mapeamento no código:
+---
 
-**goal_test(self, state)**
-
-**6. Custo de Caminho — path_cost**
+## 1.6 Custo de Caminho — path_cost
 
 Cada movimento tem custo unitário:
 
-custo = 1 por ação
+```
+path_cost(c, s, a, s') = c + 1
+```
 
-**path_cost(c, s, a, s') = c + 1**
+**Mapeamento no código:**
+`path_cost(self, c, state1, action, state2)`
 
-Mapeamento no código:
+---
 
-**path_cost(self, c, state1, action, state2)**
+## 1.7 Heurística
 
-**7. Heurística**
+Foi utilizada a menor distância de Manhattan entre o robô e uma entrega pendente:
 
-Utilizamos a distância de Manhattan para definir qual a melhor rota possível
+```
+h(n) = min(|x - dx| + |y - dy|)
+```
 
-Inicialmente,é feita uma soma da distância do robô até cada entrega pendente e depois soma o custo total.
+### Intuição
 
-**Distância Manhattan:**
+Estima o menor número de movimentos necessários para alcançar a próxima entrega.
 
-**∣x1−x2∣+∣y1−y2∣**
+### Propriedades
 
-*(x1,y1) representam o estado atual
+* **Admissível**: nunca superestima o custo real.
+* **Consistente**: a variação entre estados vizinhos é no máximo o custo da ação.
 
-Propriedades:
+**Mapeamento no código:**
+`h(self, node)`
 
-Admissível: não superestima o custo real.
+---
 
-Consistente: baseada na distância Manhattan com custo de movimento unitário
+# 2. Classificação do Ambiente
 
-Mapeamento no código:
+Segundo os critérios do AIMA:
 
-**h(self, node)**
+* **Determinístico**: ações sempre produzem o mesmo resultado.
+* **Totalmente observável**: o agente conhece sua posição e todas as entregas restantes.
+* **Estático**: o ambiente não muda enquanto o agente decide.
+* **Discreto**: estados, ações e tempo são discretos.
+* **Agente único**: apenas um agente atua no ambiente.
 
+---
 
+# 3. Arquitetura do Sistema
 
+## Ambiente
 
+Classe: `HospitalEnvironment`
 
+Responsável por:
 
+* Manter o estado do mundo
+* Executar ações
+* Fornecer percepções
+* Exibir o estado via `render()`
 
+---
 
+## Agente
 
+Classe: `DeliveryAgent`
 
-# Como Executar o Sistema
+Representa o robô inserido no ambiente.
+
+---
+
+## Programa de Agente
+
+Classe: `DeliveryAgentProgram`
+
+Funcionamento:
+
+1. Recebe a percepção do ambiente
+2. Formula um problema (`DeliveryProblem`)
+3. Executa o algoritmo A*
+4. Obtém um plano (sequência de ações)
+5. Executa uma ação por passo
+
+A busca é executada **dentro do programa do agente**, conforme o modelo **SimpleProblemSolvingAgentProgram** do AIMA.
+
+---
+
+# 4. Algoritmos de Busca
+
+## Utilizado
+
+* **A*** (A-Star)
+
+### Justificativa
+
+O problema possui múltiplas entregas, aumentando o espaço de estados. O A* utiliza heurística para guiar a busca, reduzindo significativamente o número de estados explorados mantendo a solução ótima.
+
+---
+
+## Não utilizados
+
+* **BFS**: não utiliza heurística, explora muitos estados.
+* **DFS**: pode encontrar soluções não ótimas.
+* **Uniform Cost Search**: garante otimalidade, mas é menos eficiente que A* sem heurística.
+
+---
+
+# 5. Testes
+
+Foram implementados testes automatizados com **pytest**, verificando:
+
+* Funcionamento do `goal_test`
+* Atualização correta de estados em `result`
+* Validade da heurística
+* Capacidade do A* encontrar solução
+* Funcionamento básico do agente
+
+---
+
+# 6. Estrutura do Projeto
+
+```
+projectGrupoX/
+  env/
+    hospital_environment.py
+  agents/
+    delivery_agent.py
+  problems/
+    delivery_problem.py
+  tests/
+  main.py
+  README.md
+```
+
+---
+
+# 7. Como Executar o Sistema
 
 ## Pré-requisitos
 
@@ -179,4 +274,6 @@ python main.py
   - `.` → Espaço livre
 
 A execução termina automaticamente quando todas as entregas forem concluídas ou quando o número máximo de passos for atingido.
+# 8. Observações
 
+Este projeto foi desenvolvido com foco na integração entre teoria e implementação, utilizando busca como mecanismo de decisão dentro de um programa de agente, conforme proposto no AIMA.
