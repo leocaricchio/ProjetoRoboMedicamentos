@@ -181,15 +181,22 @@ Foram implementados testes automatizados com **pytest**, verificando:
 # 6. Estrutura do Projeto
 
 projectGrupo6/
-  env/
-    hospital_environment.py
-  agents/
-    delivery_agent.py
-  problems/
-    delivery_problem.py
-  tests/
-  main.py
-  README.md
+│
+├── env/
+│   └── hospital_environment.py
+│
+├── agents/
+│   └── delivery_agent.py
+│
+├── problems/
+│   └── delivery_problem.py
+│
+├── tests/
+│   ├── test_agent.py
+│   └── test_problem.py
+│
+├── main.py
+└── README.md
 
 # 7. Como Executar o Sistema
 
