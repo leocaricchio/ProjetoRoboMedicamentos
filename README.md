@@ -178,8 +178,9 @@ Foram implementados testes automatizados com **pytest**, verificando:
 * Capacidade do A* encontrar solução
 * Funcionamento básico do agente
 
-# 6. Estrutura do Projeto
+## 6. Estrutura do Projeto
 
+```
 projectGrupo6/
 │
 ├── env/
@@ -197,6 +198,7 @@ projectGrupo6/
 │
 ├── main.py
 └── README.md
+```
 
 # 7. Como Executar o Sistema
 
