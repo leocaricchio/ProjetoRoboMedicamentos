@@ -34,17 +34,11 @@ Uso de frozenset é necessário para permitir hashing e comparação eficiente, 
 
 O estado inicial é definido como:
 
-```
 (posicao_inicial, todas_as_entregas)
-```
 
 Exemplo:
 
-```
 ((0,0), frozenset({(1,2), (3,4), (4,1)}))
-```
-
----
 
 ## 1.3 Conjunto de Ações
 
@@ -62,8 +56,6 @@ Se o robô entrar em uma posição que contém uma entrega pendente, a entrega �
 **Mapeamento no código:**
 `actions(self, state)`
 
----
-
 ## 1.4 Modelo de Transição — result(s, a)
 
 A função de transição:
@@ -74,50 +66,36 @@ A função de transição:
 
 Formalmente:
 
-```
 result((pos, entregas), ação) =
     (nova_pos, entregas - {nova_pos})  se nova_pos ∈ entregas
     (nova_pos, entregas)              caso contrário
-```
 
 **Mapeamento no código:**
 `result(self, state, action)`
-
----
 
 ## 1.5 Teste de Objetivo — goal_test
 
 O objetivo é alcançado quando não há entregas pendentes.
 
-```
 goal_test(state) = True se len(entregas_pendentes) == 0
-```
 
 **Mapeamento no código:**
 `goal_test(self, state)`
-
----
 
 ## 1.6 Custo de Caminho — path_cost
 
 Cada movimento tem custo unitário:
 
-```
 path_cost(c, s, a, s') = c + 1
-```
 
 **Mapeamento no código:**
-`path_cost(self, c, state1, action, state2)`
-
----
+path_cost(self, c, state1, action, state2)`
 
 ## 1.7 Heurística
 
 Foi utilizada a menor distância de Manhattan entre o robô e uma entrega pendente:
 
-```
 h(n) = min(|x - dx| + |y - dy|)
-```
 
 ### Intuição
 
@@ -131,8 +109,6 @@ Estima o menor número de movimentos necessários para alcançar a próxima entr
 **Mapeamento no código:**
 `h(self, node)`
 
----
-
 # 2. Classificação do Ambiente
 
 Segundo os critérios do AIMA:
@@ -142,8 +118,6 @@ Segundo os critérios do AIMA:
 * **Estático**: o ambiente não muda enquanto o agente decide.
 * **Discreto**: estados, ações e tempo são discretos.
 * **Agente único**: apenas um agente atua no ambiente.
-
----
 
 # 3. Arquitetura do Sistema
 
@@ -158,15 +132,11 @@ Responsável por:
 * Fornecer percepções
 * Exibir o estado via `render()`
 
----
-
 ## Agente
 
 Classe: `DeliveryAgent`
 
 Representa o robô inserido no ambiente.
-
----
 
 ## Programa de Agente
 
@@ -182,8 +152,6 @@ Funcionamento:
 
 A busca é executada **dentro do programa do agente**, conforme o modelo **SimpleProblemSolvingAgentProgram** do AIMA.
 
----
-
 # 4. Algoritmos de Busca
 
 ## Utilizado
@@ -192,17 +160,13 @@ A busca é executada **dentro do programa do agente**, conforme o modelo **Simpl
 
 ### Justificativa
 
-O problema possui múltiplas entregas, aumentando o espaço de estados. O A* utiliza heurística para guiar a busca, reduzindo significativamente o número de estados explorados mantendo a solução ótima.
+O problema possui múltiplas entregas, aumentando o espaço de estados. O A* utiliza heurística para guiar a busca calculando a distância até o próximo e até o fim das entregas, reduzindo significativamente o número de estados explorados mantendo a solução ótima.
 
----
+## Utilizados na fase de teste
 
-## Não utilizados
-
-* **BFS**: não utiliza heurística, explora muitos estados.
+* **BFS**: não utiliza heurística,explora muitos estados.
 * **DFS**: pode encontrar soluções não ótimas.
 * **Uniform Cost Search**: garante otimalidade, mas é menos eficiente que A* sem heurística.
-
----
 
 # 5. Testes
 
@@ -214,12 +178,9 @@ Foram implementados testes automatizados com **pytest**, verificando:
 * Capacidade do A* encontrar solução
 * Funcionamento básico do agente
 
----
-
 # 6. Estrutura do Projeto
 
-```
-projectGrupoX/
+projectGrupo6/
   env/
     hospital_environment.py
   agents/
@@ -229,9 +190,6 @@ projectGrupoX/
   tests/
   main.py
   README.md
-```
-
----
 
 # 7. Como Executar o Sistema
 
@@ -274,6 +232,3 @@ python main.py
   - `.` → Espaço livre
 
 A execução termina automaticamente quando todas as entregas forem concluídas ou quando o número máximo de passos for atingido.
-# 8. Observações
-
-Este projeto foi desenvolvido com foco na integração entre teoria e implementação, utilizando busca como mecanismo de decisão dentro de um programa de agente, conforme proposto no AIMA.
