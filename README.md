@@ -241,3 +241,7 @@ python main.py
   - `.` → Espaço livre
 
 A execução termina automaticamente quando todas as entregas forem concluídas ou quando o número máximo de passos for atingido.
+
+--
+Vídeo explicativo sobre a solução :
+https://drive.google.com/file/d/1aLJpqEdwsvnNwi7lzuVBF7mcdvUDT7nx/view?usp=drive_link
